@@ -1,6 +1,6 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit';
 
-const initialState = { cart: true };
+const initialState = { cart: false };
 const shoppingOperations = createSlice({
   name: 'cart',
   initialState,
