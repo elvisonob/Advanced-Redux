@@ -8,7 +8,7 @@ const shoppingOperations = createSlice({
     toggleCart(state) {
       state.cart = !state.cart;
     },
-    // when button clicked, all the items should be added to cart
+
     addToCart(state, action) {
       const newItem = action.payload;
       const existingItem = state.cartContent.find(
@@ -25,6 +25,20 @@ const shoppingOperations = createSlice({
       } else {
         existingItem.quantity++;
         existingItem.totalPrice = existingItem.totalPrice + newItem.price;
+      }
+    },
+    removeFromCart(state, action) {
+      const id = action.payload;
+      const existingItem = state.cartContent.find(
+        (eachItem) => eachItem.id === id
+      );
+      if (existingItem.quantity === 1) {
+        state.cartContent = state.cartContent.filter(
+          (eachItem) => eachItem.id !== id
+        );
+      } else {
+        existingItem.quantity--;
+        existingItem.totalPrice = existingItem.totalPrice - existingItem.price;
       }
     },
   },
