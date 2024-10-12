@@ -15,6 +15,7 @@ const DUMMY_PRODUCTS = [
     price: 8,
   },
 ];
+
 const Products = (props) => {
   return (
     <section className={classes.products}>

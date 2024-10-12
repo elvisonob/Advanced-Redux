@@ -16,8 +16,8 @@ const shoppingOperations = createSlice({
       );
       if (!existingItem) {
         state.cartContent.push({
-          itemId: newItem.id,
-          name: newItem.name,
+          id: newItem.id,
+          name: newItem.title,
           price: newItem.price,
           totalPrice: newItem.price,
           quantity: 1,

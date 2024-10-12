@@ -4,32 +4,29 @@ import CartItem from './CartItem';
 import { useSelector } from 'react-redux';
 
 const Cart = (props) => {
-  const cartContent = useSelector((state) => state.shoppingReducer.cartContent);
-  console.log(cartContent);
+  const cartContents = useSelector(
+    (state) => state.shoppingReducer.cartContent
+  );
+  console.log(cartContents);
   return (
     <Card className={classes.cart}>
       <h2>Your Shopping Cart</h2>
       <ul>
-        {cartContent.map((cartItems) => (
+        {cartContents.map((cartItems) => (
           <CartItem
-            key={cartItems.itemId}
-            id={cartItems.itemId}
-            title={cartItems.name}
-            description={cartItems.description}
-            price={cartItems.price}
+            key={cartItems.id}
+            item={{
+              id: cartItems.id,
+              title: cartItems.name,
+              price: cartItems.price,
+              total: cartItems.totalPrice,
+              quantity: cartItems.quantity,
+            }}
           />
         ))}
       </ul>
     </Card>
   );
 };
-
-//cartContent has the below
-
-/*itemId: newItem.id,
-name: newItem.name,
-price: newItem.price,
-totalPrice: newItem.price,
-quantity: 1 */
 
 export default Cart;
