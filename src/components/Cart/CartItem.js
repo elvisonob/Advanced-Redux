@@ -5,6 +5,12 @@ import { useDispatch } from 'react-redux';
 const CartItem = (props) => {
   const { title, quantity, total, price } = props.item;
 
+  const dispatchFn = useDispatch();
+
+  const onQuantityIncrease = () => {
+    dispatchFn(shoppingAction.additionButton());
+  };
+
   return (
     <li className={classes.item}>
       <header>
@@ -20,7 +26,7 @@ const CartItem = (props) => {
         </div>
         <div className={classes.actions}>
           <button>-</button>
-          <button>+</button>
+          <button onClick={onQuantityIncrease}>+</button>
         </div>
       </div>
     </li>

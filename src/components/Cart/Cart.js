@@ -7,7 +7,7 @@ const Cart = (props) => {
   const cartContents = useSelector(
     (state) => state.shoppingReducer.cartContent
   );
-  console.log(cartContents);
+
   return (
     <Card className={classes.cart}>
       <h2>Your Shopping Cart</h2>
