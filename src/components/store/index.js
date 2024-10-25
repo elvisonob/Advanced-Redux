@@ -43,17 +43,6 @@ const shoppingOperations = createSlice({
       }
       state.totalQuantity--;
     },
-
-    // when the plus button is clicked, the cart.quantityNumber should increase
-
-    //if it is above 1, it should decrease,
-
-    // if it is 1, it should be removed
-
-    additionButton(state, action) {
-      const existingItem = state.cartContent;
-      existingItem.quantity = existingItem.quantity++;
-    },
   },
 });
 

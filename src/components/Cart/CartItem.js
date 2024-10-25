@@ -3,12 +3,22 @@ import { shoppingAction } from './../store/index';
 import { useDispatch } from 'react-redux';
 
 const CartItem = (props) => {
-  const { title, quantity, total, price } = props.item;
+  const { title, quantity, total, price, id } = props.item;
 
   const dispatchFn = useDispatch();
 
-  const onQuantityIncrease = () => {
-    dispatchFn(shoppingAction.additionButton());
+  const onQuantityIncrease = (state) => {
+    dispatchFn(
+      shoppingAction.addToCart({
+        id,
+        title,
+        price,
+      })
+    );
+  };
+
+  const onQuantityDecrease = (state, action) => {
+    dispatchFn(shoppingAction.removeFromCart(id));
   };
 
   return (
@@ -25,7 +35,7 @@ const CartItem = (props) => {
           x <span>{quantity}</span>
         </div>
         <div className={classes.actions}>
-          <button>-</button>
+          <button onClick={onQuantityDecrease}>-</button>
           <button onClick={onQuantityIncrease}>+</button>
         </div>
       </div>
