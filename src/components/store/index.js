@@ -1,12 +1,25 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit';
 
-const initialState = { cart: false, cartContent: [], totalQuantity: 0 };
+const initialState = {
+  cart: false,
+  notification: null,
+  cartContent: [],
+  totalQuantity: 0,
+};
 const shoppingOperations = createSlice({
   name: 'cart',
   initialState,
   reducers: {
     toggleCart(state) {
       state.cart = !state.cart;
+    },
+
+    showNotification(state, action) {
+      state.notification = {
+        status: action.payload.status,
+        title: action.payload.title,
+        message: action.payload.message,
+      };
     },
 
     addToCart(state, action) {
