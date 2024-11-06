@@ -59,6 +59,52 @@ const shoppingOperations = createSlice({
   },
 });
 
+// to keep my components lean, so i bring the codes here
+
+export const sendCartData = (cartContent) => {
+  return async (dispatch) => {
+    dispatch(
+      shoppingAction.showNotification({
+        status: 'pending',
+        title: 'Sending...',
+        message: 'Sending Cart data',
+      })
+    );
+
+    const sendRequest = async () => {
+      const response = await fetch(
+        'https://redux-server-dce7e-default-rtdb.firebaseio.com/cart.json',
+        {
+          method: 'PUT',
+          body: JSON.stringify(cartContent),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Sending cart data failed');
+      }
+
+      dispatch(
+        shoppingAction.showNotification({
+          status: 'success',
+          message: 'success',
+          title: 'Sent cart data successful',
+        })
+      );
+    };
+
+    await sendRequest().catch(() => {
+      dispatch(
+        shoppingAction.showNotification({
+          status: 'error',
+          title: 'Error!',
+          message: 'Sending Cart Data failed',
+        })
+      );
+    });
+  };
+};
+
 const store = configureStore({
   reducer: { shoppingReducer: shoppingOperations.reducer },
 });
