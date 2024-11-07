@@ -41,6 +41,10 @@ const shoppingOperations = createSlice({
         existingItem.totalPrice = existingItem.totalPrice + newItem.price;
       }
     },
+    replaceCart(state, action) {
+      state.totalQuantity = action.payload.totalQuantity;
+      state.cartContent = action.payload.items;
+    },
     removeFromCart(state, action) {
       const id = action.payload;
       const existingItem = state.cartContent.find(
@@ -102,6 +106,35 @@ export const sendCartData = (cartContent) => {
         })
       );
     });
+  };
+};
+
+export const fetchRequest = () => {
+  return async (dispatch) => {
+    const fetchData = async () => {
+      const response = await fetch(
+        'https://redux-server-dce7e-default-rtdb.firebaseio.com/cart.json'
+      );
+
+      if (!response.ok) {
+        throw new Error('Could not load data');
+      }
+
+      const data = await response.json();
+      return data;
+    };
+    try {
+      const cartData = await fetchData();
+      dispatch(shoppingAction.replaceCart(cartData));
+    } catch (error) {
+      dispatch(
+        shoppingAction.showNotification({
+          status: 'error',
+          title: 'Error!',
+          message: 'Fetching Cart Data failed',
+        })
+      );
+    }
   };
 };
 
