@@ -1,11 +1,14 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 
 const initialState = {
   cart: false,
   notification: null,
   cartContent: [],
+
   totalQuantity: 0,
 };
+
 const shoppingOperations = createSlice({
   name: 'cart',
   initialState,
@@ -27,6 +30,7 @@ const shoppingOperations = createSlice({
       const existingItem = state.cartContent.find(
         (eachItem) => eachItem.id === newItem.id
       );
+
       state.totalQuantity++;
       if (!existingItem) {
         state.cartContent.push({
@@ -43,7 +47,7 @@ const shoppingOperations = createSlice({
     },
     replaceCart(state, action) {
       state.totalQuantity = action.payload.totalQuantity;
-      state.cartContent = action.payload.items;
+      state.cartContent = action.payload.item;
     },
     removeFromCart(state, action) {
       const id = action.payload;
@@ -63,8 +67,6 @@ const shoppingOperations = createSlice({
   },
 });
 
-// to keep my components lean, so i bring the codes here
-
 export const sendCartData = (cartContent) => {
   return async (dispatch) => {
     dispatch(
@@ -75,12 +77,13 @@ export const sendCartData = (cartContent) => {
       })
     );
 
+    const cart = useSelector((state) => state.cartContent);
     const sendRequest = async () => {
       const response = await fetch(
         'https://redux-server-dce7e-default-rtdb.firebaseio.com/cart.json',
         {
           method: 'PUT',
-          body: JSON.stringify(cartContent),
+          body: JSON.stringify(cart),
         }
       );
 
@@ -125,6 +128,8 @@ export const fetchRequest = () => {
     };
     try {
       const cartData = await fetchData();
+      console.log(cartData);
+
       dispatch(shoppingAction.replaceCart(cartData));
     } catch (error) {
       dispatch(
