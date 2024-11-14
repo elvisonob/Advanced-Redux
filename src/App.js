@@ -28,6 +28,7 @@ function App() {
 
     dispatchFn(sendCartData(cartContent));
   }, [cartContent, dispatchFn]);
+
   return (
     <Fragment>
       {notification && (

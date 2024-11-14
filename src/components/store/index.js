@@ -5,7 +5,6 @@ const initialState = {
   cart: false,
   notification: null,
   cartContent: [],
-
   totalQuantity: 0,
 };
 
@@ -45,10 +44,15 @@ const shoppingOperations = createSlice({
         existingItem.totalPrice = existingItem.totalPrice + newItem.price;
       }
     },
+
     replaceCart(state, action) {
-      state.totalQuantity = action.payload.totalQuantity;
-      state.cartContent = action.payload.item;
+      state.cartContent = action.payload.cartContent || []; // Assign cartContent
+      state.totalQuantity = state.cartContent.reduce(
+        (total, item) => total + item.quantity,
+        0
+      ); // Calculate totalQuantity based on cartContent
     },
+
     removeFromCart(state, action) {
       const id = action.payload;
       const existingItem = state.cartContent.find(
@@ -77,13 +81,12 @@ export const sendCartData = (cartContent) => {
       })
     );
 
-    const cart = useSelector((state) => state.cartContent);
     const sendRequest = async () => {
       const response = await fetch(
         'https://redux-server-dce7e-default-rtdb.firebaseio.com/cart.json',
         {
           method: 'PUT',
-          body: JSON.stringify(cart),
+          body: JSON.stringify(cartContent),
         }
       );
 
@@ -130,7 +133,7 @@ export const fetchRequest = () => {
       const cartData = await fetchData();
       console.log(cartData);
 
-      dispatch(shoppingAction.replaceCart(cartData));
+      dispatch(shoppingAction.replaceCart({ cartContent: cartData }));
     } catch (error) {
       dispatch(
         shoppingAction.showNotification({
