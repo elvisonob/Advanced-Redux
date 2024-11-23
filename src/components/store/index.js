@@ -8,8 +8,6 @@ const initialState = {
   isChanged: false,
 };
 
-// when we are not sending to cart, isChanged should be false and true when we are sending to cart
-
 const shoppingOperations = createSlice({
   name: 'cart',
   initialState,
@@ -27,13 +25,13 @@ const shoppingOperations = createSlice({
     },
 
     addToCart(state, action) {
-      state.isChanged = true;
       const newItem = action.payload;
       const existingItem = state.cartContent.find(
         (eachItem) => eachItem.id === newItem.id
       );
 
       state.totalQuantity++;
+      state.isChanged = true;
       if (!existingItem) {
         state.cartContent.push({
           id: newItem.id,
@@ -54,15 +52,15 @@ const shoppingOperations = createSlice({
         (total, item) => total + item.quantity,
         0
       );
-      state.isChanged = false;
     },
 
     removeFromCart(state, action) {
-      state.isChanged = true;
       const id = action.payload;
+
       const existingItem = state.cartContent.find(
         (eachItem) => eachItem.id === id
       );
+      state.isChanged = true;
       if (existingItem.quantity === 1) {
         state.cartContent = state.cartContent.filter(
           (eachItem) => eachItem.id !== id

@@ -14,6 +14,9 @@ function App() {
   );
   const cartIsVisible = useSelector((state) => state.shoppingReducer.cart);
   const cartContent = useSelector((state) => state.shoppingReducer.cartContent);
+  const changeNotification = useSelector(
+    (state) => state.shoppingReducer.isChanged
+  );
   const dispatchFn = useDispatch();
 
   useEffect(() => {
@@ -26,8 +29,10 @@ function App() {
       return;
     }
 
-    dispatchFn(sendCartData(cartContent));
-  }, [cartContent, dispatchFn]);
+    if (changeNotification) {
+      dispatchFn(sendCartData(cartContent));
+    }
+  }, [cartContent, changeNotification, dispatchFn]);
 
   return (
     <Fragment>
