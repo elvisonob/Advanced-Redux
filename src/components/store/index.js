@@ -1,12 +1,14 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit';
-import { useSelector } from 'react-redux';
 
 const initialState = {
   cart: false,
   notification: null,
   cartContent: [],
   totalQuantity: 0,
+  isChanged: false,
 };
+
+// when we are not sending to cart, isChanged should be false and true when we are sending to cart
 
 const shoppingOperations = createSlice({
   name: 'cart',
@@ -25,6 +27,7 @@ const shoppingOperations = createSlice({
     },
 
     addToCart(state, action) {
+      state.isChanged = true;
       const newItem = action.payload;
       const existingItem = state.cartContent.find(
         (eachItem) => eachItem.id === newItem.id
@@ -46,14 +49,16 @@ const shoppingOperations = createSlice({
     },
 
     replaceCart(state, action) {
-      state.cartContent = action.payload.cartContent || []; // Assign cartContent
+      state.cartContent = action.payload.cartContent || [];
       state.totalQuantity = state.cartContent.reduce(
         (total, item) => total + item.quantity,
         0
-      ); // Calculate totalQuantity based on cartContent
+      );
+      state.isChanged = false;
     },
 
     removeFromCart(state, action) {
+      state.isChanged = true;
       const id = action.payload;
       const existingItem = state.cartContent.find(
         (eachItem) => eachItem.id === id
